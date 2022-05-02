@@ -29,7 +29,7 @@ import java.util.Objects;
  * Usages:
  * Step1: Add it into your logback
  * <code>
- * <include resource="island-logback-converter.xml"/>
+ * &lt;include resource="island-logback-converter.xml"/&gt;
  * </code>
  * Step2: Use it in your pattern
  * <code>
@@ -41,11 +41,31 @@ import java.util.Objects;
  * @author xasync.com
  */
 public class FocusClassOfCallerConverter extends ClassicConverter {
+
+    /**
+     * The short name about registering itself into logback
+     */
     public final static String SHORT_NAME = "fc";
 
+
+    /**
+     * The long name about registering itself into logback
+     */
     public final static String LONG_NAME = "focusClass";
+
+    /**
+     * By default, the length of the class name allowed to be output
+     */
     private final static int DEFAULT_PRINT_MAX_LEN = 25;
+
+    /**
+     * Provide the ability about shortening the class name of caller focused
+     */
     private Abbreviator abbreviator;
+
+    /**
+     * The index of the caller of focus in the stack
+     */
     private Integer indexOfStack;
 
     @Override
@@ -91,6 +111,12 @@ public class FocusClassOfCallerConverter extends ClassicConverter {
         }
     }
 
+    /**
+     * Obtain the class name of caller which you focus
+     *
+     * @param event the log event of logback
+     * @return the class name
+     */
     protected String getFullyQualifiedName(ILoggingEvent event) {
         try {
             StackTraceElement[] cda = event.getCallerData();

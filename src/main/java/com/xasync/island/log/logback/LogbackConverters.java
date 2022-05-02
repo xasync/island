@@ -29,12 +29,29 @@ import java.util.Objects;
  * @author xasync.com
  */
 public class LogbackConverters {
+
+    /**
+     * the class name suffix of a standard logback's converter which implements {@link ClassicConverter}
+     */
     public static final String LOGBACK_CONVERTER_SUFFIX = "Converter";
 
+    /**
+     * Register a converter into logback,and the long name will be provided by system
+     *
+     * @param converter the class meta of logback's converter which implements {@link ClassicConverter}
+     * @param shortName the short name registered into logback
+     */
     public static void register(Class<? extends ClassicConverter> converter, String shortName) {
         register(converter, shortName, null);
     }
 
+    /**
+     * Register a converter into logback
+     *
+     * @param converter the class meta of logback's converter which implements {@link ClassicConverter}
+     * @param shortName the short name registered into logback
+     * @param longName  the long name registered into logback
+     */
     public static void register(Class<? extends ClassicConverter> converter, String shortName, String longName) {
         Objects.requireNonNull(converter);
         ILoggerFactory loggerFactory = LoggerFactory.getILoggerFactory();
@@ -67,6 +84,12 @@ public class LogbackConverters {
         }
     }
 
+    /**
+     * Extract the long name for logback's converter
+     *
+     * @param converter the class meta of logback's converter which implements {@link ClassicConverter}
+     * @return the long name of logback's converter
+     */
     public static String extractLongNameOfConverter(Class<? extends ClassicConverter> converter) {
         Objects.requireNonNull(converter);
         String simpleName = converter.getSimpleName();
