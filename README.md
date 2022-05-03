@@ -35,7 +35,7 @@ Then, you can browse the specific variables provided in 'island-logback-converte
     <include resource="island-logback-converter.xml"/>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%date %level %fc{15,1} %msg%n</pattern>
+            <pattern>%date %ip_island %level %fc_island{15,1} %msg%n</pattern>
         </encoder>
     </appender>
 
