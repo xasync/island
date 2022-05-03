@@ -26,17 +26,6 @@ import java.util.Objects;
 
 /**
  * FocusClassOfCallerConverter enhances the function of ClassOfCallerConverter
- * Usages:
- * Step1: Add it into your logback
- * <code>
- * &lt;include resource="island-logback-converter.xml"/&gt;
- * </code>
- * Step2: Use it in your pattern
- * <code>
- * "%date{ISO8601} %level %thread %fc{15} %msg%n" // equals to %fc{15,0} or %c or %class
- * "%date{ISO8601} %level %thread %focusClass{15} %msg%n"
- * "%date{ISO8601} %level %thread %fc{15,1} %msg%n"
- * </code>
  *
  * @author xasync.com
  */
@@ -45,13 +34,13 @@ public class FocusClassOfCallerConverter extends ClassicConverter {
     /**
      * The short name about registering itself into logback
      */
-    public final static String SHORT_NAME = "fc";
+    public final static String SHORT_NAME = "fc_island";
 
 
     /**
      * The long name about registering itself into logback
      */
-    public final static String LONG_NAME = "focusClass";
+    public final static String LONG_NAME = "focusClass_island";
 
     /**
      * By default, the length of the class name allowed to be output
@@ -79,6 +68,7 @@ public class FocusClassOfCallerConverter extends ClassicConverter {
         List<String> optionList = this.getOptionList();
         if (Objects.isNull(optionList) || optionList.isEmpty()) {
             this.abbreviator = new ClassNameOnlyAbbreviator();
+            this.started = true;
             return;
         }
         //extract and config the max print length from the first option.
@@ -100,13 +90,16 @@ public class FocusClassOfCallerConverter extends ClassicConverter {
             boolean noSecondOption = optionList.size() < 2;
             if (noSecondOption) {
                 this.indexOfStack = 0;
+                this.started = true;
                 return;
             }
             String indexOfStackOptStr = optionList.get(1);
             int optVal = Integer.parseInt(indexOfStackOptStr);
             this.indexOfStack = Math.max(optVal, 0);
+            this.started = true;
         } catch (Throwable ex) {
             this.indexOfStack = 0;
+            this.started = true;
             ex.printStackTrace();
         }
     }

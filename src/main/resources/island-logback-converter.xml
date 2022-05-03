@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <included>
-    <conversionRule conversionWord="fc" converterClass="com.xasync.island.log.logback.FocusClassOfCallerConverter"/>
+    <conversionRule conversionWord="fc_island" converterClass="com.xasync.island.log.logback.FocusClassOfCallerConverter"/>
+    <conversionRule conversionWord="ip_island" converterClass="com.xasync.island.log.logback.IpOfMachineConverter"/>
 </included>
