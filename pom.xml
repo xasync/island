@@ -91,7 +91,7 @@
                 <configuration>
                     <serverId>ossrh</serverId>
                     <nexusUrl>${ossrh.nexus-url}/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    <autoReleaseAfterClose>false</autoReleaseAfterClose>
                 </configuration>
             </plugin>
             <plugin>
