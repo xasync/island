@@ -16,10 +16,9 @@ limitations under the License.
 package com.xasync.island.ifkiller.biz.role.impl;
 
 import com.xasync.island.ifkiller.annotation.IfKiller;
-import com.xasync.island.ifkiller.biz.role.RolePermissionAbility;
-import com.xasync.island.ifkiller.biz.role.RoleTypeEnum;
+import com.xasync.island.ifkiller.biz.role.AnimalBarkAbility;
+import com.xasync.island.ifkiller.biz.role.BarkTypeEnum;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,13 +27,11 @@ import java.util.List;
  *
  * @author xasync.com
  */
-@IfKiller(meets = RoleTypeEnum.CUSTOM_CODE, isDefault = true)
-public class DefaultRolePermissionAbility implements RolePermissionAbility {
+@IfKiller(meets = BarkTypeEnum.CAT_CODE)
+public class CatAnimalBarkAbility implements AnimalBarkAbility {
 
     @Override
-    public List<String> availablePermissions() {
-        return Collections.singletonList(
-                "search"
-        );
+    public String start() {
+        return "cat";
     }
 }

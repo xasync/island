@@ -15,34 +15,13 @@ limitations under the License.
 */
 package com.xasync.island.ifkiller.biz.role;
 
+import java.util.List;
+
 /**
- * RoleTypeEnum
+ * RolePermissionService
  *
  * @author xasync.com
  */
-public enum RoleTypeEnum {
-    SUPER_ADMIN(RoleTypeEnum.SUPER_ADMIN_CODE, "Super Admin"),
-    CUSTOM(RoleTypeEnum.CUSTOM_CODE, ""),
-    MERCHANT(RoleTypeEnum.MERCHANT_CODE, "");
-
-    public final static String SUPER_ADMIN_CODE = "SUPER_ADMIN";
-    public final static String CUSTOM_CODE = "CUSTOM";
-    public final static String MERCHANT_CODE = "MERCHANT";
-
-    private final String code;
-    private final String desc;
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getDesc() {
-        return desc;
-    }
-
-    RoleTypeEnum(String code, String desc) {
-        this.code = code;
-        this.desc = desc;
-    }
-
+public interface AnimalBarkAbility {
+    String start();
 }

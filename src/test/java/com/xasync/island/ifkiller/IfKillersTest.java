@@ -15,27 +15,36 @@ limitations under the License.
 */
 package com.xasync.island.ifkiller;
 
-import com.xasync.island.ifkiller.biz.role.RolePermissionAbility;
-import com.xasync.island.ifkiller.biz.role.RoleTypeEnum;
+import com.xasync.island.ifkiller.biz.role.AnimalBarkAbility;
+import com.xasync.island.ifkiller.biz.role.BarkTypeEnum;
+import com.xasync.island.test.BaseSpringTest;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * IfKillersTest
  *
  * @author xasync.com
  */
-public class IfKillersTest {
+public class IfKillersTest extends BaseSpringTest {
 
     @Test
-    public void testRolePermission() {
-        List<String> permissions = IfKillers.about(RolePermissionAbility.class)
-                .meet(RoleTypeEnum.MERCHANT_CODE)
-                .availablePermissions();
-        Assert.assertEquals(Collections.singletonList("search"), permissions);
+    public void testAnimalBark() {
+        //meet
+        String token1 = "cat";
+        String voice1 = IfKillers.about(AnimalBarkAbility.class)
+                .meet(token1)
+                .start();
+        System.out.println(voice1);
+        Assert.assertEquals(BarkTypeEnum.CAT.getCode(), voice1);
+
+        //no meet and active default
+        String token2 = "goose";
+        String voice2 = IfKillers.about(AnimalBarkAbility.class)
+                .meet(token2)
+                .start();
+        System.out.println(voice2);
+        /* the default implementation is DuckAnimalBarkAbility */
+        Assert.assertEquals(BarkTypeEnum.DUCK.getCode(), voice2);
     }
 }

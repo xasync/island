@@ -16,26 +16,19 @@ limitations under the License.
 package com.xasync.island.ifkiller.biz.role.impl;
 
 import com.xasync.island.ifkiller.annotation.IfKiller;
-import com.xasync.island.ifkiller.biz.role.RolePermissionAbility;
-import com.xasync.island.ifkiller.biz.role.RoleTypeEnum;
-
-import java.util.Arrays;
-import java.util.List;
+import com.xasync.island.ifkiller.biz.role.AnimalBarkAbility;
+import com.xasync.island.ifkiller.biz.role.BarkTypeEnum;
 
 /**
  * SuperAdminRolePermissionAbility
  *
  * @author xasync.com
  */
-@IfKiller(meets = RoleTypeEnum.SUPER_ADMIN_CODE)
-public class SuperAdminRolePermissionAbility implements RolePermissionAbility {
+@IfKiller(meets = BarkTypeEnum.TIGER_CODE)
+public class TigerAnimalBarkAbility implements AnimalBarkAbility {
+
     @Override
-    public List<String> availablePermissions() {
-        return Arrays.asList(
-                "search",
-                "edit",
-                "delete",
-                "create"
-        );
+    public String start() {
+        return "tiger";
     }
 }
