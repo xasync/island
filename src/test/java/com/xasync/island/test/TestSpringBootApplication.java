@@ -23,5 +23,5 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author xasync.com
  */
 @SpringBootApplication(scanBasePackages = "com.xasync.island")
-public class SpringBootApplicationTest {
+public class TestSpringBootApplication {
 }

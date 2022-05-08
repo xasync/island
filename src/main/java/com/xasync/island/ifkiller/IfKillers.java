@@ -33,14 +33,14 @@ import java.util.concurrent.ConcurrentHashMap;
  *     }
  *
  *     // dog
- *     &64;IfKiller(meets={"dog"})
+ *     &#64;IfKiller(meets={"dog"})
  *     public class DogBark{
  *         public void start(){
  *             System.out.println("dog");
  *         }
  *     }
  *     // cat
- *     &64;IfKiller(meets={"cat"}, isDefault=true)
+ *     &#64;IfKiller(meets={"cat"}, isDefault=true)
  *     public class CatBark{
  *         public void start(){
  *             System.out.println("cat");

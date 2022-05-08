@@ -35,23 +35,11 @@ public class SpringContexts {
     private final static AtomicBoolean INIT_FLAG = new AtomicBoolean(false);
     private static ApplicationContext APPLICATION_CONTEXT = null;
 
-    public static ApplicationContext getApplicationContext() {
-        return APPLICATION_CONTEXT;
-    }
-
-    public static <T> T autowire(Class<T> metaClass) {
-        checkInit();
-        Object instance = APPLICATION_CONTEXT.getAutowireCapableBeanFactory()
-                .autowire(metaClass, AUTOWIRE_BY_TYPE, false);
-        return metaClass.cast(instance);
-    }
-
-    public static String value(String text) {
-        checkInit();
-        ConfigurableEnvironment cEnv = (ConfigurableEnvironment) APPLICATION_CONTEXT.getEnvironment();
-        return cEnv.resolvePlaceholders(text);
-    }
-
+    /**
+     * This is a static method for initializing SpringContexts
+     *
+     * @param applicationContext the application context of spring
+     */
     public static void init(ApplicationContext applicationContext) {
         if (Objects.isNull(applicationContext)) {
             LOG.warn("Abort to initialize SpringContexts because of receiving a null ApplicationContext");
@@ -66,6 +54,42 @@ public class SpringContexts {
             LOG.info("Success to initialize SpringContexts. (: Power by island!");
         }
     }
+
+    /**
+     * Get the current application context of spring
+     *
+     * @return ApplicationContext
+     */
+    public static ApplicationContext getApplicationContext() {
+        return APPLICATION_CONTEXT;
+    }
+
+    /**
+     * Get an instance by the metaClass, it equals to '@Autowired'
+     *
+     * @param metaClass meta class
+     * @param <T>       type
+     * @return instance
+     */
+    public static <T> T autowire(Class<T> metaClass) {
+        checkInit();
+        Object instance = APPLICATION_CONTEXT.getAutowireCapableBeanFactory()
+                .autowire(metaClass, AUTOWIRE_BY_TYPE, false);
+        return metaClass.cast(instance);
+    }
+
+    /**
+     * Extract the value of placeholder, it equals to '@Value'
+     *
+     * @param text placeholder
+     * @return value
+     */
+    public static String value(String text) {
+        checkInit();
+        ConfigurableEnvironment cEnv = (ConfigurableEnvironment) APPLICATION_CONTEXT.getEnvironment();
+        return cEnv.resolvePlaceholders(text);
+    }
+
 
     private static void checkInit() {
         if (Objects.isNull(APPLICATION_CONTEXT)) {
