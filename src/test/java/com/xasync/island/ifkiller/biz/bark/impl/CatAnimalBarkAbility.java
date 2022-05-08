@@ -13,22 +13,22 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package com.xasync.island.ifkiller.biz.role.impl;
+package com.xasync.island.ifkiller.biz.bark.impl;
 
 import com.xasync.island.ifkiller.annotation.IfKiller;
-import com.xasync.island.ifkiller.biz.role.AnimalBarkAbility;
-import com.xasync.island.ifkiller.biz.role.BarkTypeEnum;
+import com.xasync.island.ifkiller.biz.bark.AnimalBarkAbility;
+import com.xasync.island.ifkiller.biz.bark.BarkTypeEnum;
 
 /**
  * SuperAdminRolePermissionAbility
  *
  * @author xasync.com
  */
-@IfKiller(meets = BarkTypeEnum.DOG_CODE)
-public class DogAnimalBarkAbility implements AnimalBarkAbility {
+@IfKiller(meets = BarkTypeEnum.CAT_CODE)
+public class CatAnimalBarkAbility implements AnimalBarkAbility {
 
     @Override
     public String start() {
-        return "dog";
+        return "cat";
     }
 }

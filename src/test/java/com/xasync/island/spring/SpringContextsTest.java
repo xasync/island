@@ -13,15 +13,23 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package com.xasync.island.ifkiller.biz.role;
+package com.xasync.island.spring;
 
-import java.util.List;
+import com.xasync.island.test.BaseSpringTest;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
- * RolePermissionService
+ * SpringContextsTest
  *
  * @author xasync.com
  */
-public interface AnimalBarkAbility {
-    String start();
+public class SpringContextsTest extends BaseSpringTest {
+
+    @Test
+    public void testValue() {
+        String appName = SpringContexts.value("${system.appName}");
+        System.out.println(appName);
+        Assert.assertEquals("island", appName);
+    }
 }
