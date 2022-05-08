@@ -20,8 +20,8 @@ is ambitious, but my determination is also firm.
 
 # What can island provides?
 
-Island's plan is not very clear at current, and I just do something in the log domain. Of course, I will be updated 
-step by step later. The functions provided likes:
+Island's plan is not very clear at current, and I just do something in EBP(Efficient-Business-Programming) domain. 
+Of course, I will be updated step by step later. The functions provided likes:
 
 ## 1. IfKiller
 Almost all programmers in the world are extremely disgusted with large pieces of if-else nested code in their hearts, 
