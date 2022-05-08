@@ -4,7 +4,7 @@
 
     <groupId>com.xasync</groupId>
     <artifactId>island</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <name>island</name>
@@ -14,25 +14,39 @@
     <url>http://www.xasync.com</url>
 
     <properties>
+        <!-- Project Settings -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <!-- End: Project Settings -->
+        <!-- Deploy Settings -->
         <ossrh.nexus-url>https://oss.sonatype.org</ossrh.nexus-url>
         <ossrh.nexus-url.new>https://s01.oss.sonatype.org</ossrh.nexus-url.new>
+        <!-- End: Deploy Settings -->
+
         <junit.version>4.13.2</junit.version>
+        <spring-boot.version>2.6.7</spring-boot.version>
+        <spring.version>5.3.19</spring.version>
         <slf4j.version>1.7.36</slf4j.version>
         <logback.version>1.2.11</logback.version>
-        <spring.version>5.3.19</spring.version>
     </properties>
 
     <dependencies>
+        <!-- Unit Test dependencies -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>${spring-boot.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- End: Unit Test dependencies -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -50,12 +64,6 @@
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <version>2.6.7</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
