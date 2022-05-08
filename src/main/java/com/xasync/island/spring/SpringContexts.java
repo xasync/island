@@ -15,11 +15,15 @@ limitations under the License.
 */
 package com.xasync.island.spring;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.env.ConfigurableEnvironment;
 
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
+
+import static org.springframework.beans.factory.config.AutowireCapableBeanFactory.AUTOWIRE_BY_TYPE;
 
 /**
  * SpringContexts
@@ -27,6 +31,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author xasync.com
  */
 public class SpringContexts {
+    private final static Logger LOG = LoggerFactory.getLogger(SpringContexts.class);
     private final static AtomicBoolean INIT_FLAG = new AtomicBoolean(false);
     private static ApplicationContext APPLICATION_CONTEXT = null;
 
@@ -34,17 +39,38 @@ public class SpringContexts {
         return APPLICATION_CONTEXT;
     }
 
+    public static <T> T autowire(Class<T> metaClass) {
+        checkInit();
+        Object instance = APPLICATION_CONTEXT.getAutowireCapableBeanFactory()
+                .autowire(metaClass, AUTOWIRE_BY_TYPE, false);
+        return metaClass.cast(instance);
+    }
+
+    public static String value(String text) {
+        checkInit();
+        ConfigurableEnvironment cEnv = (ConfigurableEnvironment) APPLICATION_CONTEXT.getEnvironment();
+        return cEnv.resolvePlaceholders(text);
+    }
+
     public static void init(ApplicationContext applicationContext) {
         if (Objects.isNull(applicationContext)) {
-            System.out.println("Abort to initialize SpringContexts because of receiving a null ApplicationContext");
+            LOG.warn("Abort to initialize SpringContexts because of receiving a null ApplicationContext");
             return;
         }
         synchronized (INIT_FLAG) {
-            if (INIT_FLAG.get()) {
+            if (INIT_FLAG.get() && Objects.nonNull(APPLICATION_CONTEXT)) {
                 return;
             }
             APPLICATION_CONTEXT = applicationContext;
             INIT_FLAG.set(true);
+            LOG.info("Success to initialize SpringContexts. (: Power by island!");
+        }
+    }
+
+    private static void checkInit() {
+        if (Objects.isNull(APPLICATION_CONTEXT)) {
+            String reason = INIT_FLAG.get() ? "initialize successfully(null-value)" : "invoke the init method before use";
+            throw new RuntimeException("SpringContexts don't " + reason);
         }
     }
 }

@@ -17,6 +17,9 @@ package com.xasync.island.ifkiller;
 
 import com.xasync.island.ifkiller.annotation.IfKiller;
 import com.xasync.island.spring.SpringContexts;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -25,77 +28,132 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * IfKillerProxy
+ * IfKillerProxy is used to manage the implementation instance of your abstraction. It can find specific instance
+ * according to the token you input.
  *
  * @author xasync.com
  */
 public class IfKillerProxy<T> {
+    private final static Logger LOG = LoggerFactory.getLogger(IfKillerProxy.class);
+
+    /**
+     * The instance registration pool, Structure:(token,instance)
+     */
     private final Map<String, T> INSTANCE_POOL = new ConcurrentHashMap<>();
+
+    /**
+     * The meatClass about your abstraction
+     */
     private final Class<T> definition;
 
+    /**
+     * The default implement for your abstraction, it will be return when it can't be found
+     */
     private T defaultImplementInstance;
 
+    /**
+     * Private constructor, you can use {@code create } to instead of it
+     *
+     * @param clazz the metaClass
+     */
     private IfKillerProxy(Class<T> clazz) {
         this.definition = clazz;
     }
 
+    /**
+     * Create a proxy for managing the implementation instance of your abstraction.
+     *
+     * @param clazz the metaClass
+     * @param <T>   type
+     * @return IfKillerProxy
+     */
     public static <T> IfKillerProxy<T> create(Class<T> clazz) {
         return new IfKillerProxy<>(clazz);
     }
 
-
-    public T meet(String identity) {
-        String indexKey = Objects.nonNull(identity) ? identity.trim() : "";
-        if (indexKey.isEmpty()) {
+    /**
+     * Find the implementation instance according to the token you input
+     *
+     * @param token a token that you declare it by '@IfKiller'
+     * @return a implementation instance
+     */
+    public T meet(String token) {
+        String registerKey = Objects.nonNull(token) ? token.trim() : "";
+        if (registerKey.isEmpty()) {
             return Optional.ofNullable(defaultImplementInstance)
-                    .orElseThrow(() -> new RuntimeException(""));
+                    .orElseThrow(() -> new RuntimeException("The token you input is blank"));
         }
-        T instance = INSTANCE_POOL.get(indexKey);
+        // Get priority from registration pool
+        T instance = INSTANCE_POOL.get(registerKey);
         if (Objects.nonNull(instance)) {
             return instance;
         }
-
-        instance = findInstanceInApplicationContext(indexKey);
+        // Find the instance in spring context because of not exists.
+        instance = findInstanceInApplicationContext(registerKey);
         if (Objects.nonNull(instance)) {
-            INSTANCE_POOL.putIfAbsent(indexKey, instance);
+            //success: register it into pool and return
+            INSTANCE_POOL.putIfAbsent(registerKey, instance);
             return instance;
         } else if (Objects.nonNull(defaultImplementInstance)) {
+            //default: return the default instance when it is not null
             return defaultImplementInstance;
         } else {
-            throw new RuntimeException("");
+            //fail and no default: throw exception
+            String msg = "there is no implementation instance about '" + registerKey
+                    + "' and you use '@IfKiller(meets={\"" + registerKey + "\"})' to declare it";
+            throw new RuntimeException(msg);
         }
     }
 
-
+    /**
+     * Check if the current proxy is belongs to the metaClass
+     *
+     * @param clazz the metaClass
+     * @return true or false
+     */
     boolean belongTo(Class<?> clazz) {
         return Objects.nonNull(clazz) && Objects.equals(clazz, definition);
     }
 
-    private T findInstanceInApplicationContext(String name) {
-        if (Objects.isNull(name)) {
+    /**
+     * Find the instance of the current metaClass according to the token
+     *
+     * @param token implementation
+     * @return a implementation instance
+     */
+    private T findInstanceInApplicationContext(String token) {
+        if (Objects.isNull(token)) {
             return null;
         }
-        try {
-            Map<String, T> instanceMap = SpringContexts.getApplicationContext()
-                    .getBeansOfType(definition);
-            for (T instance : instanceMap.values()) {
-                Class<?> instClazz = instance.getClass();
-                IfKiller spec = instClazz.getAnnotation(IfKiller.class);
-                if (Objects.isNull(spec)) {
-                    continue;
-                }
-                boolean isFind = Arrays.stream(spec.meets()).allMatch(name::endsWith);
-                if (isFind) {
-                    return instance;
-                }
-                //
-                if (spec.isDefault() && Objects.isNull(defaultImplementInstance)) {
-                    defaultImplementInstance = instance;
-                }
+        ApplicationContext applicationContext = SpringContexts.getApplicationContext();
+        if (Objects.isNull(applicationContext)) {
+            throw new RuntimeException("IfKillers depends on SpringContexts, so that you must invokes " +
+                    "'SpringContexts.init' for finishing to initialize it before use.");
+        }
+        // get instances by the metaClass of your abstraction
+        Map<String, T> instanceMap = applicationContext.getBeansOfType(definition);
+        for (T instance : instanceMap.values()) {
+            Class<?> instClazz = instance.getClass();
+            IfKiller spec = instClazz.getAnnotation(IfKiller.class);
+            if (Objects.isNull(spec)) {
+                LOG.warn("'{}' miss the '@IfKiller' annotation", instClazz.getCanonicalName());
+                continue;
             }
-            return null;
-        } catch (Throwable ex) {
-            return null;
+            //match the token
+            boolean isFind = Arrays.stream(spec.meets())
+                    .filter(Objects::nonNull)
+                    .map(String::trim)
+                    .allMatch(token::equals);
+            //return the current instance if finding
+            if (isFind) {
+                return instance;
+            }
+            //By the way, find the default implementation
+            if (Objects.isNull(defaultImplementInstance) && spec.isDefault()) {
+                defaultImplementInstance = instance;
+            }
         }
+        // return null if not find
+        return null;
     }
 }

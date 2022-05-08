@@ -19,10 +19,11 @@ package com.xasync.island.ifkiller.annotation;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.*;
-import java.util.Enumeration;
 
 /**
- * IfKiller
+ * IfKiller is used to declare that the current implementation class needs to be scanned, and you don't add '@Component'
+ * repeatedly('@IfKiller' equals '@Component'). Of course, it is very important that you need to define some
+ * tokens you expect to meet by setting the meets field.
  *
  * @author xasync.com
  */
@@ -32,7 +33,17 @@ import java.util.Enumeration;
 @Component
 public @interface IfKiller {
 
+    /**
+     * Some tokens you expect to meet. if system meets your token, it will let the class to handles.
+     *
+     * @return tokens
+     */
     String[] meets();
 
+    /**
+     * Whether is the current class default, defaults false.
+     *
+     * @return true or false
+     */
     boolean isDefault() default false;
 }
