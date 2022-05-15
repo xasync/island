@@ -32,6 +32,11 @@ public class EnhanceLogger implements Logger {
      */
     private final Logger log;
 
+    /**
+     * Constructor
+     *
+     * @param logger A logger instance
+     */
     public EnhanceLogger(Logger logger) {
         if (Objects.nonNull(logger)) {
             this.log = logger;
@@ -70,22 +75,57 @@ public class EnhanceLogger implements Logger {
         return sb.toString();
     }
 
+    /**
+     * Trace
+     *
+     * @param throwable the cause exception
+     * @param s         a string printed
+     * @param objects   values which be used to instead of the placeholders in string
+     */
     public void trace(Throwable throwable, String s, Object... objects) {
         log.trace(fillValues(s, objects), throwable);
     }
 
+    /**
+     * Debug
+     *
+     * @param throwable the cause exception
+     * @param s         a string printed
+     * @param objects   values which be used to instead of the placeholders in string
+     */
     public void debug(Throwable throwable, String s, Object... objects) {
         log.debug(fillValues(s, objects), throwable);
     }
 
+    /**
+     * Info
+     *
+     * @param throwable the cause exception
+     * @param s         a string printed
+     * @param objects   values which be used to instead of the placeholders in string
+     */
     public void info(Throwable throwable, String s, Object... objects) {
         log.info(fillValues(s, objects), throwable);
     }
 
+    /**
+     * Warn
+     *
+     * @param throwable the cause exception
+     * @param s         a string printed
+     * @param objects   values which be used to instead of the placeholders in string
+     */
     public void warn(Throwable throwable, String s, Object... objects) {
         log.warn(fillValues(s, objects), throwable);
     }
 
+    /**
+     * Error
+     *
+     * @param throwable the cause exception
+     * @param s         a string printed
+     * @param objects   values which be used to instead of the placeholders in string
+     */
     public void error(Throwable throwable, String s, Object... objects) {
         log.error(fillValues(s, objects), throwable);
     }

@@ -27,11 +27,22 @@ import java.util.Objects;
  * @author xasync.com
  */
 public class Logs {
-
+    /**
+     * Declares the default EnhanceLogger which will be used if missing the logger provide.
+     */
     private final static EnhanceLogger DEFAULT_ENHANCE_LOGGER = new EnhanceLogger(
             LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME));
+    /**
+     * Pool is used to store a that has been requested to avoid creating it every time
+     */
     private final static SoftConcurrentHashMap<String, EnhanceLogger> POOL = new SoftConcurrentHashMap<>();
 
+    /**
+     * Create a EnhanceLogger's instance basing on the logger you provide
+     *
+     * @param logger slf4j's logger
+     * @return EnhanceLogger
+     */
     public static EnhanceLogger on(Logger logger) {
         if (Objects.isNull(logger)) {
             return DEFAULT_ENHANCE_LOGGER;
@@ -45,6 +56,12 @@ public class Logs {
         return eLog;
     }
 
+    /**
+     * Create a EnhanceLogger's instance basing on the logger's name you provide
+     *
+     * @param loggerName the logger name
+     * @return EnhanceLogger
+     */
     public static EnhanceLogger on(String loggerName) {
         String name;
         if (Objects.isNull(loggerName) || (name = loggerName.trim()).isEmpty()) {
@@ -59,6 +76,12 @@ public class Logs {
         return eLog;
     }
 
+    /**
+     * Create a EnhanceLogger's instance basing on caller's metaclass you provide
+     *
+     * @param clazz Meta-Class of caller object
+     * @return EnhanceLogger
+     */
     public static EnhanceLogger on(Class<?> clazz) {
         if (Objects.isNull(clazz)) {
             return DEFAULT_ENHANCE_LOGGER;
