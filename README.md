@@ -148,7 +148,7 @@ Then, you can browse the specific variables provided in 'island-logback-converte
 
 ## 3. Spring Domain
 
-## 3.1 SpringContexts
+### 3.1 SpringContexts
 Provides tools and methods to get the current ApplicationContext in spring project or related operations, but you must
 finish to initialize before you use.
 
